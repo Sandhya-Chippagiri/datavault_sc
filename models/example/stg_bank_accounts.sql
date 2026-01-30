@@ -1,11 +1,12 @@
 {%- set yaml_metadata -%}
-source_model: "RAW_BANK_ACCOUNTS" # This matches the name in sources.yml
+source_model:
+  raw_banking: "RAW_BANK_ACCOUNTS"
 derived_columns:
-  RECORD_SOURCE: "!CORE_BANKING"  # Adding a static label
-  LOAD_DATETIME: "LOAD_DATE"      # Renaming for consistency
+  RECORD_SOURCE: "!CORE_BANKING"
+  LOAD_DATETIME: "LOAD_DATE"
 hashed_columns:
-  ACCOUNT_HK: "ACC_ID"            # This creates the unique Hash Key for the Account
-  ACCOUNT_HASHDIFF:               # This creates a "fingerprint" of the data to detect changes
+  ACCOUNT_HK: "ACC_ID"
+  ACCOUNT_HASHDIFF:
     - "ACC_HOLDER_NAME"
     - "ACC_TYPE"
 {%- endset -%}

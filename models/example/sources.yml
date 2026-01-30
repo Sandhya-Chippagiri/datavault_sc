@@ -1,6 +1,8 @@
+version: 2
+
 sources:
-  - name: raw
-    database: DBT_DATAVAULT
+  - name: raw_banking
+    database: DBT_DATAVAULT    
     schema: VAULT
     tables:
       - name: RAW_BANK_ACCOUNTS
