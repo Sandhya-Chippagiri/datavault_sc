@@ -1,0 +1,22 @@
+WITH latest_sat AS (
+    SELECT 
+        ACCOUNT_HK,
+        ACC_HOLDER_NAME,
+        ACC_TYPE,
+        OPEN_DATE,
+        LOAD_DATETIME,
+        ROW_NUMBER() OVER (PARTITION BY ACCOUNT_HK ORDER BY LOAD_DATETIME DESC) as row_num
+    FROM {{ ref('sat_account_details') }}
+)
+
+SELECT
+    h.ACCOUNT_HK,           
+    h.ACC_ID as account_number,
+    s.ACC_HOLDER_NAME as customer_name,
+    s.ACC_TYPE as account_category,
+    s.OPEN_DATE as date_opened,
+    h.RECORD_SOURCE as system_origin
+FROM {{ ref('hub_account') }} h
+LEFT JOIN latest_sat s 
+    ON h.ACCOUNT_HK = s.ACCOUNT_HK
+    AND s.row_num = 1
