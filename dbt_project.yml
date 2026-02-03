@@ -43,12 +43,11 @@ models:
     # Routing folders to schemas
     staging:
       +schema: stage
-      +materialized: view  # Staging is usually views
-
+      +materialized: view  
     vaults:
       +schema: vault
-      +materialized: incremental # Hubs/Links/Sats are incremental
+      +materialized: incremental 
 
     marts:
       +schema: marts
-      +materialized: table # Dims/Facts are usually tables
+      +materialized: table 
