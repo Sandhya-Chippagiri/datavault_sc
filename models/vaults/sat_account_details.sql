@@ -3,7 +3,7 @@
 {%- set source_model = "stg_bank_accounts" -%}
 {%- set src_pk = "ACCOUNT_HK" -%}
 {%- set src_hashdiff = "ACCOUNT_HASHDIFF" -%}
-{%- set src_payload = ["ACC_HOLDER_NAME", "ACC_TYPE", "OPEN_DATE"] -%}
+{%- set src_payload = ["ACC_HOLDER_NAME", "ACC_TYPE", "OPEN_DATE","SECURITY_NO"] -%}
 {%- set src_ldts = "LOAD_DATETIME" -%}
 {%- set src_source = "RECORD_SOURCE" -%}
 
