@@ -3,7 +3,8 @@ WITH latest_sat AS (
         ACCOUNT_HK,
         ACC_HOLDER_NAME,
         ACC_TYPE,
-        OPEN_DATE,
+        -- Snowflake user defined function
+        DBT_DATAVAULT.UDF.DATE_CONVERSION(OPEN_DATE) AS OPEN_DATE,
         LOAD_DATETIME,
         ROW_NUMBER() OVER (PARTITION BY ACCOUNT_HK ORDER BY LOAD_DATETIME DESC) as row_num
     FROM {{ ref('sat_account_details') }}

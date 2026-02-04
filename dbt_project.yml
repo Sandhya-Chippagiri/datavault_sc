@@ -41,7 +41,7 @@ models:
     +materialized: view
     
     # Routing folders to schemas
-    staging:
+    stage:
       +schema: stage
       +materialized: view  
     vaults:
