@@ -1,0 +1,24 @@
+version: 2
+
+models:
+  - name: stg_bank_accounts
+    description: "Staging for bank accounts with cleaning and hashing."
+    columns:
+      - name: ACCOUNT_HK
+        tests:
+          - unique
+          - not_null
+      - name: ACC_ID
+        tests:
+          - not_null
+
+  - name: stg_transactions
+    description: "Staging for transactions with cleaning and hashing."
+    columns:
+      - name: TRANSACTION_LINK_HK
+        tests:
+          - unique
+          - not_null
+      - name: AMOUNT
+        tests:
+          - not_null

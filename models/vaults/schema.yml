@@ -1,0 +1,35 @@
+version: 2
+
+models:
+  - name: hub_account
+    columns:
+      - name: ACCOUNT_HK
+        tests:
+          - unique
+          - not_null
+
+  - name: link_transaction
+    columns:
+      - name: TRANSACTION_LINK_HK
+        tests:
+          - unique
+          - not_null
+      - name: FROM_ACCOUNT_HK
+        tests:
+          - relationships:
+              to: ref('hub_account')
+              field: ACCOUNT_HK
+      - name: TO_ACCOUNT_HK
+        tests:
+          - relationships:
+              to: ref('hub_account')
+              field: ACCOUNT_HK
+
+  - name: sat_account_details
+    columns:
+      - name: ACCOUNT_HK
+        tests:
+          - not_null
+          - relationships:
+              to: ref('hub_account')
+              field: ACCOUNT_HK
