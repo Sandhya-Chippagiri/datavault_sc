@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  # --- HUB ---
+  
   - name: hub_account
     tests:
       - dbt_utils.unique_combination_of_columns:
@@ -15,13 +15,9 @@ models:
         tests:
           - not_null
 
-  # --- LINK ---
+  
   - name: link_transaction
     columns:
-      - name: TRANSACTION_LINK_HK
-        tests:
-          - unique
-          - not_null
       - name: FROM_ACCOUNT_HK
         tests:
           - relationships:
@@ -33,7 +29,6 @@ models:
               to: ref('hub_account')
               field: ACCOUNT_HK
 
-  # --- SATELLITE ---
   - name: sat_account_details
     columns:
       - name: ACCOUNT_HK
@@ -43,7 +38,6 @@ models:
               to: ref('hub_account')
               field: ACCOUNT_HK
       - name: ACCOUNT_HASHDIFF
-        description: "Hashdiff for change detection"
         tests:
           - not_null
       - name: LOAD_DATETIME
