@@ -1,0 +1,5 @@
+SELECT
+    ACCOUNT_HK,
+    LOAD_DATETIME
+FROM {{ ref('sat_account_details') }}
+WHERE LOAD_DATETIME > CURRENT_TIMESTAMP()
