@@ -50,4 +50,4 @@ models:
 
     marts:
       +schema: marts
-      +materialized: table 
+      +materialized: incremental 

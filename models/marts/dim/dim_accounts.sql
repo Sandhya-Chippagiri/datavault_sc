@@ -2,9 +2,8 @@ WITH latest_sat AS (
     SELECT 
         ACCOUNT_HK,
         ACC_HOLDER_NAME,
-        ACC_TYPE,
-        -- Snowflake user defined function
-        DBT_DATAVAULT.UDF.DATE_CONVERSION(OPEN_DATE) AS OPEN_DATE,
+        DBT_DATAVAULT.UDF.ToUpperCase(ACC_TYPE) AS ACCOUNT_TYPE,
+        OPEN_DATE,
         LOAD_DATETIME,
         SECURITY_NO,
         ROW_NUMBER() OVER (PARTITION BY ACCOUNT_HK ORDER BY LOAD_DATETIME DESC) as row_num
@@ -15,7 +14,7 @@ SELECT
     h.ACCOUNT_HK,           
     h.ACC_ID as account_number,
     s.ACC_HOLDER_NAME as customer_name,
-    s.ACC_TYPE as account_category,
+    s.ACCOUNT_TYPE as account_category,
     s.OPEN_DATE as date_opened,
     h.RECORD_SOURCE as system_origin,
     s.SECURITY_NO
