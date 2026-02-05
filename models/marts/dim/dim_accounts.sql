@@ -11,14 +11,13 @@ WITH latest_acc_sat AS (
         ACCOUNT_HK,
         ACC_HOLDER_NAME,
         DBT_DATAVAULT.UDF.ToUpperCase(ACC_TYPE) AS ACCOUNT_TYPE,
-        CUSTOMER_ID,
         OPEN_DATE,
+        CUSTOMER_ID,
         LOAD_DATETIME,
         ROW_NUMBER() OVER (PARTITION BY ACCOUNT_HK ORDER BY LOAD_DATETIME DESC) as row_num
     FROM {{ ref('sat_account_details') }}
 ),
 
--- 2. Get the latest customer personal details
 latest_cust_stg AS (
     SELECT 
         CUSTOMER_ID,
@@ -31,7 +30,7 @@ latest_cust_stg AS (
     QUALIFY ROW_NUMBER() OVER (PARTITION BY CUSTOMER_ID ORDER BY LOAD_DATETIME DESC) = 1
 ),
 
--- 3. Bring the Customer Hub into the mix
+
 cust_hub AS (
     SELECT 
         CUSTOMER_HK,
@@ -39,32 +38,32 @@ cust_hub AS (
     FROM {{ ref('hub_customers') }}
 )
 
--- 4. Final Assembly
+
 SELECT
-    c.CUSTOMER_ID as customer_id,
+    h_acc.ACCOUNT_HK,           
     h_acc.ACC_ID as account_number,
+    h_cust.CUSTOMER_HK,
+    c.CUSTOMER_ID as customer_id,
     c.customer_full_name AS customer_name,
     s.ACCOUNT_TYPE as account_category,
     s.OPEN_DATE as date_opened,
     s.LOAD_DATETIME as LOAD_DT,
+    c.PHONE_NO,
     h_acc.RECORD_SOURCE as system_origin,
     c.EMAIL_ID,
-    c.PHONE_NO,
-    c.SSN,
-     h_cust.CUSTOMER_HK,
-    h_acc.ACCOUNT_HK
+    c.SSN
 FROM {{ ref('hub_account') }} h_acc
 LEFT JOIN latest_acc_sat s 
     ON h_acc.ACCOUNT_HK = s.ACCOUNT_HK
     AND s.row_num = 1
--- JOINING ON NAME: We link the account holder string to the stage name
+
 LEFT JOIN latest_cust_stg c
     ON s.CUSTOMER_ID = c.CUSTOMER_ID
--- JOINING ON ID: We link the stage record to the permanent Customer Hub
+
 LEFT JOIN cust_hub h_cust
     ON c.CUSTOMER_ID = h_cust.CUSTOMER_ID
 
 {% if is_incremental() %}
-  -- Filter to only include records newer than what we already have in the Dimension
+  
   WHERE s.LOAD_DATETIME > (SELECT MAX(LOAD_DT) FROM {{ this }})
 {% endif %}
