@@ -7,3 +7,4 @@ sources:
     tables:
       - name: RAW_BANK_ACCOUNTS
       - name: RAW_TRANSACTIONS
+      - name: RAW_BANK_CUSTOMER
